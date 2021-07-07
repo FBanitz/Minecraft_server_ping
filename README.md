@@ -1,6 +1,12 @@
 # Minecraft_server_ping
  A flutter app that ping a target minecraft server and show data using api.mcsrvstat.us
 
+## Release
+
+You can download the app [here](https://github.com/FBanitz/Minecraft_server_ping/tree/master/build/app/outputs/apk/release) 
+
+install the .apk coresponding to you're android architecture (If you don't know what it is, try them to find the right one)
+
 ## Screenshots
 ![Screenshot 1](https://raw.githubusercontent.com/FBanitz/Minecraft_server_ping/master/screenshots/Screenshot_2021-07-07-17-10-58-953_com.example.minecraft_server_ping.jpg)
 
