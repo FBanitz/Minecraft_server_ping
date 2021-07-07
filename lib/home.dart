@@ -16,6 +16,20 @@ class _HomeState extends State<Home> {
   String data = "";
   String ip = "";
 
+  bool responseOnline = false;
+  String responseIp;
+  String responsePort;
+  String responseHostname;
+  String responseVersion;
+  String responseIcon;
+  int responsePlayerCount;
+  int responseMaxPlayers;
+  List<String> responsePlayerList;
+  List<String> responsePlayerHead;
+  List<String> responseInfo;
+  List<String> responseMotd;
+
+
   changeIp(value) {
     setState(() {
       ip = value;
@@ -33,66 +47,64 @@ class _HomeState extends State<Home> {
         margin: const EdgeInsets.all(13),
         child: Column(
           children: <Widget>[
-            serverData != null && serverData.online
+            responseOnline
                 ? Expanded(
                     child: ListView(
                       children: [
-                        if (serverData.icon != null)
-                          Html(data: '<img src="${serverData.icon}">'),
-                        if (serverData.ip != null) Text("ip : ${serverData.ip}"),
-                        if (serverData.port != null)
-                          Text("port : ${serverData.port}"),
-                        if (serverData.hostname != null)
-                          Text("hostname : ${serverData.hostname}"),
-                        if (serverData.version != null)
-                          Text("version : ${serverData.version}"),
-                        if (serverData.motd != null) Text("motd : "),
-                        if (serverData.motd != null)
+                        if (responseIcon != null)
+                          Html(data: '<img src="$responseIcon">'),
+                        if (responseHostname != null)
+                          Text("hostname : $responseHostname"),
+                        if (responseIp != null) 
+                          Text("ip : $responseIp"),
+                        if (responsePort != null)
+                          Text("port : $responsePort"),
+                        if (responseVersion != null)
+                          Text("version : $responseVersion"),
+                        if (responseMotd != null) 
+                          Text("motd : "),
+                        if (responseMotd != null)
                           Container(
                               color: Colors.grey[700],
                               margin: const EdgeInsets.all(13),
                               child: Column(
                                 children: [
-                                  for (int i = 0; i < serverData.motd.length; i++)
-                                    Html(data: serverData.motd[i]),
+                                  for (int i = 0; i < responseMotd.length; i++)
+                                    Html(data: responseMotd[i]),
                                 ],
                               )),
-                        if (serverData.maxPlayers != null)
-                          Text(
-                              "Players : ${serverData.playerCount} / ${serverData.maxPlayers}"),
-                        serverData.playerList != null &&
-                                serverData.maxPlayers != null
+                        if (responseMaxPlayers != null)
+                          Text("Players : $responsePlayerCount / $responseMaxPlayers"),
+                            responsePlayerList != null && responseMaxPlayers != null
                             ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  for (int i = 0;
-                                      i < serverData.playerList.length;
-                                      i++)
-                                    Row(
-                                      children: [
-                                        if (serverData.playerHead != null)
-                                          Html(
-                                              data:
-                                                  '<img src="${serverData.playerHead[i]}" alt="${serverData.playerList[i]}\'s head">'),
-                                        Text(" - ${serverData.playerList[i]}"),
-                                      ],
-                                    ),
-                                  if (serverData.playerList.length > 10)
-                                    Text("(+ ${serverData.playerCount - 10})")
-                                ],
-                              )
-                            : serverData.playerCount == 0
-                                ? Text("- No player connected")
-                                : Text(""),
-                        if (serverData.info != null) Text("info : "),
-                        if (serverData.info != null)
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (int i = 0;
+                                    i < responsePlayerList.length;
+                                    i++)
+                                  Row(
+                                    children: [
+                                      if (responsePlayerHead != null)
+                                        Html(data : '<img src="${responsePlayerHead[i]}" alt="$responsePlayerList\'s head">'),
+                                      Text(" - ${responsePlayerList[i]}"),
+                                    ],
+                                  ),
+                                if (responsePlayerList.length > 10)
+                                  Text("(+ ${responsePlayerCount - 10})")
+                              ],
+                            )
+                            : responsePlayerCount == 0
+                            ? Text("- No player connected")
+                            : Text(""),
+                        if (responseInfo != null) Text("info : "),
+                        if (responseInfo != null)
                           Container(
                               color: Colors.grey[700],
                               margin: const EdgeInsets.all(13),
                               child: Column(
                                 children: [
-                                  for (int i = 0; i < serverData.info.length; i++)
-                                    Html(data: serverData.info[i]),
+                                  for (int i = 0; i < responseInfo.length; i++)
+                                    Html(data: responseInfo[i]),
                                 ],
                               ))
                       ],
@@ -135,7 +147,21 @@ class _HomeState extends State<Home> {
                       });
                       serverData = ServerData();
                       await serverData.pingServer(ip);
-                      setState(() {
+                      setState(() {                      
+                      if (serverData.online) {
+                        responseOnline = serverData.online;
+                        responseIp = serverData.ip;
+                        responsePort = serverData.port;
+                        responseHostname = serverData.hostname;
+                        responseVersion = serverData.version;
+                        responseIcon = serverData.icon;
+                        responsePlayerCount = serverData.playerCount;
+                        responseMaxPlayers = serverData.maxPlayers;
+                        responsePlayerList = serverData.playerList;
+                        responsePlayerHead = serverData.playerHead;
+                        responseInfo = serverData.info;
+                        responseMotd = serverData.motd;
+                      }
                         isButtonDisabled = false;
                       });
                     },
