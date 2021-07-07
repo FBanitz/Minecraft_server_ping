@@ -62,10 +62,21 @@ class _HomeState extends State<Home> {
                            ? Column(
                              crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                            for (int i = 0; i < serverData.playerList.length; i++)
-                              Text("  - ${serverData.playerList[i]}"),
-                              ],
-                          ):Text("")
+                              for (int i = 0; i < serverData.playerList.length; i++)
+                                Row(
+                                  children: [
+                                    if (serverData.playerHead != null)
+                                    Html(data: '<img src="${serverData.playerHead[i]}" alt="${serverData.playerList[i]}\'s head">'),
+                                    Text(serverData.playerList[i]),
+                                  ],
+                                ),
+                                if (serverData.playerList.length > 10)
+                                Text ("(+ ${serverData.playerCount - 10})")
+                            ],
+                            
+                          ):serverData.playerCount == 0 
+                          ? Text("- No player connected")
+                          :Text("- Player list unavailable")
                           ,
                           Text("info : "),
                       serverData.info != null
@@ -84,7 +95,7 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 )
-              : Text("Ip non valide"),
+              : Text("Invalid IP"),
           SizedBox(
             height: 25,
           ),

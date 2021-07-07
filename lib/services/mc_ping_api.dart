@@ -11,6 +11,7 @@ class ServerData {
   int playerCount;
   int maxPlayers;
   List<String> playerList;
+  List<String> playerHead;
   List<String> info;
   List<String> motd;
 
@@ -50,6 +51,7 @@ class ServerData {
         playerCount = players != null ? players.playerCount : null;
         maxPlayers = players != null ? players.maxPlayers : null;
         playerList = players != null ? players.playerList : null;
+        playerHead = players != null ? players.playerHead : null;
         
       }
     }
@@ -65,10 +67,10 @@ class Motd {
   List<String> clean;
   List<String> html;
 
-  Motd.fromJson(Map<String, dynamic> json) {
-    raw = json['raw'].cast<String>();
-    clean = json['clean'].cast<String>();
-    html = json['html'].cast<String>();
+  Motd.fromJson(Map<String, dynamic> data) {
+    raw = data['raw'].cast<String>();
+    clean = data['clean'].cast<String>();
+    html = data['html'].cast<String>();
   }
 
 }
@@ -76,8 +78,8 @@ class Motd {
 class Debug {
   bool ping;
 
-  Debug.fromJson(Map<String, dynamic> json){
-    ping = json['ping'];
+  Debug.fromJson(Map<String, dynamic> data){
+    ping = data['ping'];
   }
 }
 
@@ -86,10 +88,10 @@ class Info {
   List<String> clean;
   List<String> html;
 
-  Info.fromJson(Map<String, dynamic> json) {
-    raw = json['raw'].cast<String>();
-    clean = json['clean'].cast<String>();
-    html = json['html'].cast<String>();
+  Info.fromJson(Map<String, dynamic> data) {
+    raw = data['raw'].cast<String>();
+    clean = data['clean'].cast<String>();
+    html = data['html'].cast<String>();
   }
 
 }
@@ -98,10 +100,55 @@ class Players {
   int playerCount;
   int maxPlayers;
   List<String> playerList;
+  List<String> playerUuid;
+  List<String> playerHead;
 
-  Players.fromJson(Map<String, dynamic> json) {
-    playerCount = json['online'];
-    maxPlayers = json['max'];
-    playerList = json['list'] != null ? json['list'].cast<String>() : null;
+  Players.fromJson(Map<String, dynamic> data) {
+    var uuid = new Uuid();
+    var head = new PlayerHead();
+    playerCount = data['online'];
+    maxPlayers = data['max'];
+    playerList = data['list'] != null ? data['list'].cast<String>() : null;
+    if (playerUuid != null)
+    playerUuid.clear();
+    if (playerList != null)
+    for (int i = 0; i < playerList.length; i++){
+      uuid.getId(playerList[i]);
+      if (uuid.id != null)
+      playerUuid.add(uuid.id);
+    }
+    if (playerUuid != null)
+    for (int i = 0; i < playerUuid.length; i++){
+      head.getHead(playerUuid[i]);
+      playerHead.add(head.img);
+    }
+  }
+}
+
+class Uuid {
+  String id;
+
+  Future<void> getId(String playername) async {
+    Response response = await get('https://api.mojang.com/users/profiles/minecraft/$playername');
+    if (response.statusCode == 200) {
+      Map data = jsonDecode(utf8.decode(response.bodyBytes));
+      print(data);
+      id = data['id'];
+    } else 
+    print("unable to connect to Mojang servers");
+  }
+}
+
+class PlayerHead {
+  String img;
+
+  Future<void> getHead(String uuid) async {
+    Response response = await get('https://crafatar.com/renders/head/$uuid');
+    if (response.statusCode == 200) {
+      String data = jsonDecode(utf8.decode(response.bodyBytes));
+      print(data);
+      img = data;
+    }else 
+    print("unable to connect to craftar servers");
   }
 }
