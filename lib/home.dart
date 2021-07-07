@@ -3,8 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'services/mc_ping_api.dart';
 
 import 'package:flutter/material.dart';
-
-
+import 'package:flutter_html/flutter_html.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,8 +15,11 @@ class _HomeState extends State<Home> {
   bool isButtonDisabled = false;
   String data = "";
   String ip = "";
+  bool responseOnline = false;
+  String responseIp = "";
+  String responseVersion = "";
 
-  changeIp(value){
+  changeIp(value) {
     setState(() {
       ip = value;
     });
@@ -30,20 +32,34 @@ class _HomeState extends State<Home> {
         title: Text("Minecraft Server ping"),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Text(data),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  TextField(
-                    onChanged: changeIp,
-                  ),
-            isButtonDisabled
+      body: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 25,
+          ),
+          responseOnline
+              ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("ip : $responseIp"),
+                  Text("version : $responseVersion"),
+                  Text("motd : "),
+                  for (int i=0; i < serverData.motd.length; i++ )
+                    Html(data: serverData.motd[i]),
+                ],
+              )
+              : Text("Ip non valide"),
+          SizedBox(
+            height: 25,
+          ),
+          TextField(
+            
+            onChanged: changeIp,
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          isButtonDisabled
               ? SpinKitWave(
                   color: Colors.grey,
                   size: 20.0,
@@ -56,7 +72,11 @@ class _HomeState extends State<Home> {
                     serverData = ServerData();
                     await serverData.pingServer(ip);
                     setState(() {
-                      data = "ip : ${serverData.ip} version : ${serverData.version} motd : ${serverData.motd.clean[0]}";
+                      if (serverData.online){
+                        responseIp = serverData.ip;
+                        responseVersion = serverData.version;
+                        responseOnline = serverData.online;
+                      }
                       isButtonDisabled = false;
                     });
                   },
@@ -70,7 +90,7 @@ class _HomeState extends State<Home> {
                     child: Text('Ping!'),
                   ),
                 )
-        ],),
+        ],
       ),
     );
   }
