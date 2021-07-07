@@ -16,7 +16,6 @@ class _HomeState extends State<Home> {
   String data = "";
   String ip = "";
   bool responseOnline = false;
-  String responseIp = "";
   String responseVersion = "";
 
   changeIp(value) {
@@ -34,26 +33,62 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(
-            height: 25,
-          ),
           responseOnline
-              ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("ip : $responseIp"),
-                  Text("version : $responseVersion"),
-                  Text("motd : "),
-                  for (int i=0; i < serverData.motd.length; i++ )
-                    Html(data: serverData.motd[i]),
-                ],
-              )
+              ? Expanded(
+                  child: ListView(
+                    children: [
+                      if (serverData.icon != null)
+                        Html(data: '<img src="${serverData.icon}">'),
+                      Text("ip : ${serverData.ip}"),
+                      Text("port : ${serverData.port}"),
+                      Text("hostname : ${serverData.hostname}"),
+                      Text("version : $responseVersion"),
+                      Text("motd : "),
+                      serverData.motd != null
+                          ? Container(
+                              color: Colors.grey[700],
+                              margin: const EdgeInsets.all(13),
+                              child: Column(
+                                children: [
+                                  for (int i = 0;
+                                      i < serverData.motd.length;
+                                      i++)
+                                    Html(data: serverData.motd[i]),
+                                ],
+                              ))
+                          : Text("null"),
+                          Text("Players : ${serverData.playerCount} / ${serverData.maxPlayers}"),
+                          serverData.playerList != null
+                           ? Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                            for (int i = 0; i < serverData.playerList.length; i++)
+                              Text("  - ${serverData.playerList[i]}"),
+                              ],
+                          ):Text("")
+                          ,
+                          Text("info : "),
+                      serverData.info != null
+                          ? Container(
+                              color: Colors.grey[700],
+                              margin: const EdgeInsets.all(13),
+                              child: Column(
+                                children: [
+                                  for (int i = 0;
+                                      i < serverData.info.length;
+                                      i++)
+                                    Html(data: serverData.info[i]),
+                                ],
+                              ))
+                          : Text("null"),
+                    ],
+                  ),
+                )
               : Text("Ip non valide"),
           SizedBox(
             height: 25,
           ),
           TextField(
-            
             onChanged: changeIp,
           ),
           SizedBox(
@@ -72,8 +107,7 @@ class _HomeState extends State<Home> {
                     serverData = ServerData();
                     await serverData.pingServer(ip);
                     setState(() {
-                      if (serverData.online){
-                        responseIp = serverData.ip;
+                      if (serverData.online) {
                         responseVersion = serverData.version;
                         responseOnline = serverData.online;
                       }
@@ -89,7 +123,10 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.all(15.0),
                     child: Text('Ping!'),
                   ),
-                )
+                ),
+          SizedBox(
+            height: 25,
+          ),
         ],
       ),
     );
