@@ -15,8 +15,6 @@ class _HomeState extends State<Home> {
   bool isButtonDisabled = false;
   String data = "";
   String ip = "";
-  bool responseOnline = false;
-  String responseVersion = "";
 
   changeIp(value) {
     setState(() {
@@ -33,54 +31,61 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: <Widget>[
-          responseOnline
+          serverData != null && serverData.online
               ? Expanded(
                   child: ListView(
                     children: [
                       if (serverData.icon != null)
                         Html(data: '<img src="${serverData.icon}">'),
-                      Text("ip : ${serverData.ip}"),
-                      Text("port : ${serverData.port}"),
-                      Text("hostname : ${serverData.hostname}"),
-                      Text("version : $responseVersion"),
-                      Text("motd : "),
-                      serverData.motd != null
-                          ? Container(
-                              color: Colors.grey[700],
-                              margin: const EdgeInsets.all(13),
-                              child: Column(
-                                children: [
-                                  for (int i = 0;
-                                      i < serverData.motd.length;
-                                      i++)
-                                    Html(data: serverData.motd[i]),
-                                ],
-                              ))
-                          : Text("null"),
-                          Text("Players : ${serverData.playerCount} / ${serverData.maxPlayers}"),
-                          serverData.playerList != null
-                           ? Column(
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              for (int i = 0; i < serverData.playerList.length; i++)
-                                Row(
-                                  children: [
-                                    if (serverData.playerHead != null)
-                                    Html(data: '<img src="${serverData.playerHead[i]}" alt="${serverData.playerList[i]}\'s head">'),
-                                    Text(serverData.playerList[i]),
-                                  ],
-                                ),
+                      if (serverData.ip != null) Text("ip : ${serverData.ip}"),
+                      if (serverData.port != null)
+                        Text("port : ${serverData.port}"),
+                      if (serverData.hostname != null)
+                        Text("hostname : ${serverData.hostname}"),
+                      if (serverData.version != null)
+                        Text("version : ${serverData.version}"),
+                      if (serverData.motd != null) Text("motd : "),
+                      if (serverData.motd != null)
+                        Container(
+                        color: Colors.grey[700],
+                        margin: const EdgeInsets.all(13),
+                        child: Column(
+                          children: [
+                            for (int i = 0; i < serverData.motd.length; i++)
+                              Html(data: serverData.motd[i]),
+                          ],
+                        )),
+                      if (serverData.maxPlayers != null)
+                        Text(
+                            "Players : ${serverData.playerCount} / ${serverData.maxPlayers}"),
+                              serverData.playerList != null &&
+                              serverData.maxPlayers != null
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (int i = 0;
+                                    i < serverData.playerList.length;
+                                    i++)
+                                  Row(
+                                    children: [
+                                      if (serverData.playerHead != null)
+                                        Html(
+                                            data:
+                                                '<img src="${serverData.playerHead[i]}" alt="${serverData.playerList[i]}\'s head">'),
+                                      Text(" - ${serverData.playerList[i]}"),
+                                    ],
+                                  ),
                                 if (serverData.playerList.length > 10)
-                                Text ("(+ ${serverData.playerCount - 10})")
-                            ],
-                            
-                          ):serverData.playerCount == 0 
-                          ? Text("- No player connected")
-                          :Text("- Player list unavailable")
-                          ,
-                          Text("info : "),
-                      serverData.info != null
-                          ? Container(
+                                  Text("(+ ${serverData.playerCount - 10})")
+                              ],
+                            )
+                          : serverData.playerCount == 0
+                              ? Text("- No player connected")
+                              : Text(""),
+                      if (serverData.info != null)
+                      Text("info : "),
+                      if (serverData.info != null)
+                          Container(
                               color: Colors.grey[700],
                               margin: const EdgeInsets.all(13),
                               child: Column(
@@ -91,7 +96,6 @@ class _HomeState extends State<Home> {
                                     Html(data: serverData.info[i]),
                                 ],
                               ))
-                          : Text("null"),
                     ],
                   ),
                 )
@@ -118,10 +122,6 @@ class _HomeState extends State<Home> {
                     serverData = ServerData();
                     await serverData.pingServer(ip);
                     setState(() {
-                      if (serverData.online) {
-                        responseVersion = serverData.version;
-                        responseOnline = serverData.online;
-                      }
                       isButtonDisabled = false;
                     });
                   },
@@ -129,7 +129,7 @@ class _HomeState extends State<Home> {
                     primary: Colors.white,
                     onPrimary: Colors.black,
                   ),
-                  icon: Icon(Icons.refresh),
+                  icon: Icon(Icons.swap_vert),
                   label: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text('Ping!'),
