@@ -185,7 +185,6 @@ class _HomeState extends State<Home> {
           Container(
             margin: const EdgeInsets.all(13),
             child: Row(
-              
               children: [
                 getPlayerHead(responsePlayerList[i]),
                 Text(" - ${responsePlayerList[i]}"),
@@ -198,21 +197,23 @@ class _HomeState extends State<Home> {
     );
   }
 
-// uses 
-
+  // uses Crafatar API. Go check it out !
+  // https://crafatar.com/
   Widget getPlayerHead(playername){
     return  FutureBuilder(
       future: PlayerUuid.getId(playername, context: context),
       builder: (context, snapshot){
-        if (snapshot.hasData)
-          return Image.network(
-            "https://crafatar.com/renders/head/${snapshot.data}",
-            height: 50,
-            width: 50,
-            );
-        return SpinKitWave(
-          color: Colors.grey,
-          size: 20.0,
+        if (!snapshot.hasData)
+          return SpinKitWave(
+            color: Colors.grey,
+            size: 20.0,
+          );
+        else if (snapshot.data == "")
+          return SizedBox.shrink();
+        return Image.network(
+          "https://crafatar.com/renders/head/${snapshot.data}",
+          height: 50,
+          width: 50,
         );
       },
     );

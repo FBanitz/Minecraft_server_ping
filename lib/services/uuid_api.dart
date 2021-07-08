@@ -13,10 +13,12 @@ class PlayerUuid {
       Map data = jsonDecode(utf8.decode(response.bodyBytes));
       print(data);
       return data['id'];
-    } else {
-    print("Unable to connect to Mojang servers");
+    } 
+    else if (response.statusCode == 204)
+      print("Player not found !");
+    else
+      print("Unable to retrive UUID from Mojang servers (Error ${response.statusCode.toString()})");
     return "";
-    }
   }
 
 }
