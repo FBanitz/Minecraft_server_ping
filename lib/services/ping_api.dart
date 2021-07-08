@@ -1,5 +1,7 @@
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'uuid_api.dart';
+import 'head_api.dart';
 
 // This app uses the "Mincraft Server Status API" by Anders G. Jørgensen. Go check it out !
 // https://api.mcsrvstat.us/
@@ -128,30 +130,4 @@ class Players {
   }
 }
 
-class Uuid {
-  String id;
 
-  Future<void> getId(String playername) async {
-    Response response = await get('https://api.mojang.com/users/profiles/minecraft/$playername');
-    if (response.statusCode == 200) {
-      Map data = jsonDecode(utf8.decode(response.bodyBytes));
-      print(data);
-      id = data['id'];
-    } else 
-    print("unable to connect to Mojang servers");
-  }
-}
-
-class PlayerHead {
-  String img;
-
-  Future<void> getHead(String uuid) async {
-    Response response = await get('https://crafatar.com/renders/head/$uuid');
-    if (response.statusCode == 200) {
-      String data = jsonDecode(utf8.decode(response.bodyBytes));
-      print(data);
-      img = data;
-    }else 
-    print("unable to connect to craftar servers");
-  }
-}
