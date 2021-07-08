@@ -1,10 +1,14 @@
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+// config
+import 'config.dart';
 
+// API services
 import 'services/ping_api.dart';
 import 'services/uuid_api.dart';
 
+// Flutter packages
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -206,14 +210,14 @@ class _HomeState extends State<Home> {
         if (!snapshot.hasData)
           return SpinKitWave(
             color: Colors.grey,
-            size: 20.0,
+            size: PLAYERHEADSISE / 2,
           );
         else if (snapshot.data == "")
           return SizedBox.shrink();
         return Image.network(
           "https://crafatar.com/renders/head/${snapshot.data}",
-          height: 50,
-          width: 50,
+          height: PLAYERHEADSISE,
+          width: PLAYERHEADSISE,
         );
       },
     );
