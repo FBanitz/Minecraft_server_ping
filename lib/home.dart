@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+//dart packages
+import 'dart:io';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -19,6 +22,7 @@ class _HomeState extends State<Home> {
   ServerData serverData;
 
   bool isButtonDisabled = false;
+  bool connected = false;
   String data = "";
   String ip = "";
 
@@ -46,22 +50,39 @@ class _HomeState extends State<Home> {
     setState(() {
       isButtonDisabled = true;
     });
-    serverData = ServerData();
-    await serverData.pingServer(ip);
-    setState(() {
-      if (serverData.online) {
-        responseOnline = serverData.online;
-        responseIp = serverData.ip;
-        responsePort = serverData.port;
-        responseHostname = serverData.hostname;
-        responseVersion = serverData.version;
-        responseIcon = serverData.icon;
-        responsePlayerCount = serverData.playerCount;
-        responseMaxPlayers = serverData.maxPlayers;
-        responsePlayerList = serverData.playerList;
-        responseInfo = serverData.info;
-        responseMotd = serverData.motd;
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        connected = true;
       }
+    } on SocketException catch (_) {
+      print('not connected');
+      connected = false;
+    }
+    if (connected){
+      serverData = ServerData();
+      await serverData.pingServer(ip);
+      setState(() {
+        if (serverData.online) {
+          responseOnline = true;
+          responseIp = serverData.ip;
+          responsePort = serverData.port;
+          responseHostname = serverData.hostname;
+          responseVersion = serverData.version;
+          responseIcon = serverData.icon;
+          responsePlayerCount = serverData.playerCount;
+          responseMaxPlayers = serverData.maxPlayers;
+          responsePlayerList = serverData.playerList;
+          responseInfo = serverData.info;
+          responseMotd = serverData.motd;
+        }
+        else {
+          responseOnline = false;
+        }
+      });
+    }
+    setState(() {
       isButtonDisabled = false;
     });
   }
@@ -97,8 +118,8 @@ class _HomeState extends State<Home> {
 
   Widget showData() {
     return Container(
-      child: 
-      responseOnline
+      child: connected 
+        ? responseOnline
         ? Expanded(
             child: ListView(
               children: [
@@ -113,7 +134,8 @@ class _HomeState extends State<Home> {
               ],
             ),
           )
-        : Text("Can't resolve hostname / IP"),
+        : Text("Can't resolve hostname / IP")
+        : Text("You are not connected to the internet, check your connection")
     );
   }
 
