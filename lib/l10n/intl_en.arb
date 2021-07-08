@@ -1,0 +1,8 @@
+{
+    "welcome_message":"Enter the IP or the hostname of the server",
+    "no_internet":"You are not connected to the internet, check your connection",
+    "wrong_ip":"Can't resolve hostname / IP",
+    "hostname":"Hostname : {responseHostname}",
+    "players":"Players : {responsePlayerCount} / {responseMaxPlayers}",
+    "hostname_imput":"Hostname or IP"
+}

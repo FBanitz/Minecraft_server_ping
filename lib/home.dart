@@ -1,4 +1,6 @@
 // config
+import 'package:minecraft_server_ping/generated/l10n.dart';
+
 import 'config.dart';
 
 // API services
@@ -121,11 +123,20 @@ class _HomeState extends State<Home> {
   Widget showData() {
     return Container(
       child: init
-        ? Text("Enter the IP or the hostname of the server you want to get data from")
+        ? Text(
+            S.of(context).welcome_message,
+            textAlign: TextAlign.center,
+          )
         : !connected 
-        ? Text("You are not connected to the internet, check your connection")
+        ? Text(
+            S.of(context).no_internet,
+            textAlign: TextAlign.center,
+          )
         : !responseOnline
-        ? Text("Can't resolve hostname / IP")
+        ? Text(
+            S.of(context).wrong_ip,
+            textAlign: TextAlign.center,
+          )
         : Expanded(
             child: ListView(
               children: [
@@ -151,25 +162,25 @@ class _HomeState extends State<Home> {
 
   Widget showHostname() {
     if (responseHostname != null) 
-      return Text("hostname : $responseHostname");
+      return Text(S.of(context).hostname(responseHostname));
     return SizedBox.shrink();
   }
 
   Widget showIp() {
     if (responseIp != null) 
-      return Text("ip : $responseIp");
+      return Text("IP : $responseIp");
     return SizedBox.shrink();
   }
 
   Widget showPort() {
     if (responsePort != null) 
-      return Text("port : $responsePort");
+      return Text("Port : $responsePort");
     return SizedBox.shrink();
   }
 
   Widget showVersion() {
     if (responseVersion != null) 
-      return Text("version : $responseVersion");
+      return Text("Version : $responseVersion");
     return SizedBox.shrink();
   }
 
@@ -178,7 +189,7 @@ class _HomeState extends State<Home> {
       return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("motd : "),
+          Text("Motd : "),
           Container(
             color: Colors.grey[700],
             margin: const EdgeInsets.all(13),
@@ -199,7 +210,7 @@ class _HomeState extends State<Home> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Players : $responsePlayerCount / $responseMaxPlayers"),
+        Text(S.of(context).players(responsePlayerCount, responseMaxPlayers)),
         if(responsePlayerList != null && responseMaxPlayers != null)
           showPlayerList(),
       ],
@@ -273,7 +284,7 @@ class _HomeState extends State<Home> {
   Widget input() {
     return TextField(
       decoration: InputDecoration(
-        labelText: 'Hostname or IP',
+        labelText: S.of(context).hostname_imput,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
