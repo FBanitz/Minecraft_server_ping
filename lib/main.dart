@@ -11,7 +11,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Minecraft Server Ping',
-
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: TextTheme(bodyText1: TextStyle()),
+        brightness: Brightness.light,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
       home: Home(),
     );
   }

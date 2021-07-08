@@ -223,12 +223,14 @@ class _HomeState extends State<Home> {
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
             style: BorderStyle.solid,
+            color: Theme.of(context).textTheme.button.color,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
             style: BorderStyle.solid,
+            color: Theme.of(context).buttonColor
           ),
         ),
       ),
@@ -245,8 +247,8 @@ class _HomeState extends State<Home> {
     return ElevatedButton.icon(
       onPressed: getData,
       style: ElevatedButton.styleFrom(
-        primary: Colors.white,
-        onPrimary: Colors.black,
+        primary: Theme.of(context).buttonColor,
+        onPrimary: Theme.of(context).textTheme.button.color,
       ),
       icon: Icon(Icons.swap_vert),
       label: Padding(
