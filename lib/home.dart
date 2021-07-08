@@ -21,8 +21,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   ServerData serverData;
 
-  bool isButtonDisabled = false;
   bool connected = false;
+  bool init = true;
+  bool isButtonDisabled = false;
   String data = "";
   String ip = "";
 
@@ -49,6 +50,7 @@ class _HomeState extends State<Home> {
   void getData() async {
     setState(() {
       isButtonDisabled = true;
+      init = false;
     });
     try {
       final result = await InternetAddress.lookup('example.com');
@@ -118,9 +120,13 @@ class _HomeState extends State<Home> {
 
   Widget showData() {
     return Container(
-      child: connected 
-        ? responseOnline
-        ? Expanded(
+      child: init
+        ? Text("Enter the IP or the hostname of the server you want to get data from")
+        : !connected 
+        ? Text("You are not connected to the internet, check your connection")
+        : !responseOnline
+        ? Text("Can't resolve hostname / IP")
+        : Expanded(
             child: ListView(
               children: [
                 showIcon(),
@@ -134,8 +140,6 @@ class _HomeState extends State<Home> {
               ],
             ),
           )
-        : Text("Can't resolve hostname / IP")
-        : Text("You are not connected to the internet, check your connection")
     );
   }
 
