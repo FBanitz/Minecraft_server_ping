@@ -1,6 +1,7 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'services/ping_api.dart';
+import 'services/uuid_api.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -12,6 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   ServerData serverData;
+
   bool isButtonDisabled = false;
   String data = "";
   String ip = "";
@@ -53,7 +55,6 @@ class _HomeState extends State<Home> {
         responsePlayerCount = serverData.playerCount;
         responseMaxPlayers = serverData.maxPlayers;
         responsePlayerList = serverData.playerList;
-        responsePlayerHead = serverData.playerHead;
         responseInfo = serverData.info;
         responseMotd = serverData.motd;
       }
@@ -181,16 +182,39 @@ class _HomeState extends State<Home> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (int i = 0; i < responsePlayerList.length; i++)
-          Row(
-            children: [
-              if (responsePlayerHead != null)
-                Html(data : '<img src="${responsePlayerHead[i]}" alt="$responsePlayerList\'s head">'),
-              Text(" - ${responsePlayerList[i]}"),
-            ],
+          Container(
+            margin: const EdgeInsets.all(13),
+            child: Row(
+              
+              children: [
+                getPlayerHead(responsePlayerList[i]),
+                Text(" - ${responsePlayerList[i]}"),
+              ],
+            ),
           ),
         if (responsePlayerList.length > 10)
           Text("(+ ${responsePlayerCount - 10})")
       ],
+    );
+  }
+
+// uses 
+
+  Widget getPlayerHead(playername){
+    return  FutureBuilder(
+      future: PlayerUuid.getId(playername, context: context),
+      builder: (context, snapshot){
+        if (snapshot.hasData)
+          return Image.network(
+            "https://crafatar.com/renders/head/${snapshot.data}",
+            height: 50,
+            width: 50,
+            );
+        return SpinKitWave(
+          color: Colors.grey,
+          size: 20.0,
+        );
+      },
     );
   }
 

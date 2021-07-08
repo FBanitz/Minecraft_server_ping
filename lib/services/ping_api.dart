@@ -1,7 +1,5 @@
 import 'package:http/http.dart';
 import 'dart:convert';
-import 'uuid_api.dart';
-import 'head_api.dart';
 
 // This app uses the "Mincraft Server Status API" by Anders G. Jørgensen. Go check it out !
 // https://api.mcsrvstat.us/
@@ -16,7 +14,6 @@ class ServerData {
   int playerCount;
   int maxPlayers;
   List<String> playerList;
-  List<String> playerHead;
   List<String> info;
   List<String> motd;
 
@@ -56,7 +53,6 @@ class ServerData {
         playerCount = players != null ? players.playerCount : null;
         maxPlayers = players != null ? players.maxPlayers : null;
         playerList = players != null ? players.playerList : null;
-        playerHead = players != null ? players.playerHead : null;
         
       }
     }
@@ -105,28 +101,11 @@ class Players {
   int playerCount;
   int maxPlayers;
   List<String> playerList;
-  List<String> playerUuid;
-  List<String> playerHead;
 
   Players.fromJson(Map<String, dynamic> data) {
-    var uuid = new Uuid();
-    var head = new PlayerHead();
     playerCount = data['online'];
     maxPlayers = data['max'];
     playerList = data['list'] != null ? data['list'].cast<String>() : null;
-    if (playerUuid != null)
-    playerUuid.clear();
-    if (playerList != null)
-    for (int i = 0; i < playerList.length; i++){
-      uuid.getId(playerList[i]);
-      if (uuid.id != null)
-      playerUuid.add(uuid.id);
-    }
-    if (playerUuid != null)
-    for (int i = 0; i < playerUuid.length; i++){
-      head.getHead(playerUuid[i]);
-      playerHead.add(head.img);
-    }
   }
 }
 
