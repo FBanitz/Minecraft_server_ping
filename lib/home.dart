@@ -155,37 +155,37 @@ class _HomeState extends State<Home> {
   }
 
   Widget showIcon() {
-    if (responseIcon != null) 
+    if (responseIcon != null || SHOWALL) 
       return Html(data: '<img src="$responseIcon">');
     return SizedBox.shrink();
   }
 
   Widget showHostname() {
-    if (responseHostname != null) 
+    if (responseHostname != null || SHOWALL) 
       return Text(S.of(context).hostname(responseHostname));
     return SizedBox.shrink();
   }
 
   Widget showIp() {
-    if (responseIp != null) 
+    if (responseIp != null || SHOWALL) 
       return Text("IP : $responseIp");
     return SizedBox.shrink();
   }
 
   Widget showPort() {
-    if (responsePort != null) 
+    if (responsePort != null || SHOWALL) 
       return Text("Port : $responsePort");
     return SizedBox.shrink();
   }
 
   Widget showVersion() {
-    if (responseVersion != null) 
+    if (responseVersion != null || SHOWALL) 
       return Text("Version : $responseVersion");
     return SizedBox.shrink();
   }
 
   Widget showMotd() {
-    if (responseMotd != null)
+    if (responseMotd != null || SHOWALL)
       return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -206,7 +206,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget showPlayers() {
-    if (responseMaxPlayers != null)
+    if (responseMaxPlayers != null || SHOWALL)
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -261,7 +261,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget showInfo(){
-    if (responseInfo != null) 
+    if (responseInfo != null || SHOWALL) 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
