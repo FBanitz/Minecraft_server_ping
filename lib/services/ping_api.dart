@@ -1,6 +1,9 @@
 import 'package:http/http.dart';
 import 'dart:convert';
 
+// This app uses the "Mincraft Server Status API" by Anders G. Jørgensen. Go check it out !
+// https://api.mcsrvstat.us/
+
 class ServerData {
   bool online;
   String ip;

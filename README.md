@@ -1,5 +1,5 @@
 # Minecraft_server_ping
- A flutter app that ping a target minecraft server and show data using api.mcsrvstat.us
+ A flutter app that ping a target minecraft server and show data using [Minecraft Server Status API](https://api.mcsrvstat.us) by Anders Jørgensen
 
 ## Release
 

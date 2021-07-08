@@ -1,6 +1,6 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'services/mc_ping_api.dart';
+import 'services/ping_api.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
