@@ -1,6 +1,6 @@
-// config
 import 'package:minecraft_server_ping/generated/l10n.dart';
 
+// config
 import 'config.dart';
 
 // API services
@@ -11,6 +11,7 @@ import 'services/uuid_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:expandable/expandable.dart';
 
 //dart packages
 import 'dart:io';
@@ -156,40 +157,58 @@ class _HomeState extends State<Home> {
 
   Widget showIcon() {
     if (responseIcon != null || SHOWALL) 
-      return Html(data: '<img src="$responseIcon">');
+      return Container(
+        margin: const EdgeInsets.all(5),
+        child: Html(data: '<img src="$responseIcon">')
+        );
     return SizedBox.shrink();
   }
 
   Widget showHostname() {
     if (responseHostname != null || SHOWALL) 
-      return Text(S.of(context).hostname(responseHostname));
+      return Container(
+        margin: const EdgeInsets.all(5),
+        child: Text(S.of(context).hostname(responseHostname))
+        );
     return SizedBox.shrink();
   }
 
   Widget showIp() {
     if (responseIp != null || SHOWALL) 
-      return Text("IP : $responseIp");
+      return Container(
+        margin: const EdgeInsets.all(5),
+        child: Text("IP : $responseIp")
+      );
     return SizedBox.shrink();
   }
 
   Widget showPort() {
     if (responsePort != null || SHOWALL) 
-      return Text("Port : $responsePort");
+      return Container(
+        margin: const EdgeInsets.all(5),
+        child: Text("Port : $responsePort"),
+      );
     return SizedBox.shrink();
   }
 
   Widget showVersion() {
     if (responseVersion != null || SHOWALL) 
-      return Text("Version : $responseVersion");
+      return Container(
+        margin: const EdgeInsets.all(5),
+        child: Text("Version : $responseVersion")
+      );
     return SizedBox.shrink();
   }
 
   Widget showMotd() {
-    if (responseMotd != null || SHOWALL)
+    if (responseMotd != null)
       return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Motd : "),
+          Container(
+            margin: const EdgeInsets.all(5),
+            child: Text("Motd : ")
+          ),
           Container(
             color: Colors.grey[700],
             margin: const EdgeInsets.all(13),
@@ -202,27 +221,66 @@ class _HomeState extends State<Home> {
           ),
         ],
       );
+    if (SHOWALL)
+    return Text("motd : null");
     return SizedBox.shrink();
   }
+
+
 
   Widget showPlayers() {
-    if (responseMaxPlayers != null || SHOWALL)
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(S.of(context).players(responsePlayerCount, responseMaxPlayers)),
-        if(responsePlayerList != null && responseMaxPlayers != null)
+    if (responseMaxPlayers != null && AUTOEXPAND)
+    return Container(
+      margin: const EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(S.of(context).players(responsePlayerCount, responseMaxPlayers)),
+          if (responsePlayerList != null && responseMaxPlayers != null)
           showPlayerList(),
-      ],
+        ],
+      ),
     );
+    if (responseMaxPlayers != null)
+    return Container(
+      margin: const EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          responsePlayerList != null && responseMaxPlayers != null
+          ? ExpandablePanel(
+            header: Text(
+              S.of(context).players(responsePlayerCount, responseMaxPlayers),
+            ),
+            collapsed: SizedBox.shrink(),
+            expanded: showPlayerList(),
+            theme: ExpandableThemeData(
+              iconColor:Theme.of(context).textTheme.button.color,
+              headerAlignment: ExpandablePanelHeaderAlignment.center,
+              ),
+          )
+          : Text(S.of(context).players(responsePlayerCount, responseMaxPlayers))
+        ],
+      ),
+    );
+    if (SHOWALL)
+    return Text(S.of(context).playerListUnavailable);
     return SizedBox.shrink();
   }
 
+  
+
   Widget showPlayerList() {
+
+    var listLenght = responsePlayerList.length;
+    if (responsePlayerList.length > MAXPLAYERSLIST && MAXPLAYERSLIST > 0)
+    listLenght = MAXPLAYERSLIST;
+
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (int i = 0; i < responsePlayerList.length; i++)
+        for (int i = 0; i < listLenght ; i++)
           Container(
             margin: const EdgeInsets.all(13),
             child: Row(
@@ -232,8 +290,11 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
-        if (responsePlayerList.length > 10)
-          Text("(+ ${responsePlayerCount - 10})")
+        if (responsePlayerList.length > MAXPLAYERSLIST && MAXPLAYERSLIST > 0)
+          Container(
+            margin: const EdgeInsets.all(13),
+            child: Text("(+ ${responsePlayerCount - MAXPLAYERSLIST})"),
+          ),
       ],
     );
   }
@@ -261,11 +322,14 @@ class _HomeState extends State<Home> {
   }
 
   Widget showInfo(){
-    if (responseInfo != null || SHOWALL) 
+    if (responseInfo != null) 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("info : "),
+        Container(
+          margin: const EdgeInsets.all(5),
+          child: Text("info : ")
+        ),
         Container(
           color: Colors.grey[700],
           margin: const EdgeInsets.all(13),
@@ -278,6 +342,8 @@ class _HomeState extends State<Home> {
         ),
       ],
     );
+    if (SHOWALL)
+    return Text("info : null");
     return SizedBox.shrink();
   }
 

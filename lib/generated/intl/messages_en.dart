@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "hostname" : m0,
     "hostname_imput" : MessageLookupByLibrary.simpleMessage("Hostname or IP"),
     "no_internet" : MessageLookupByLibrary.simpleMessage("You are not connected to the internet, check your connection"),
+    "playerListUnavailable" : MessageLookupByLibrary.simpleMessage("Player list unavailable"),
     "players" : m1,
     "welcome_message" : MessageLookupByLibrary.simpleMessage("Enter the IP or the hostname of the server"),
     "wrong_ip" : MessageLookupByLibrary.simpleMessage("Can\'t resolve hostname / IP")

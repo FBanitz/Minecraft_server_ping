@@ -1,8 +1,9 @@
 {
-    "welcome_message":"Entrez L'IP ou l'adresse du serveur",
-    "no_internet":"Vous n'êtes pas connecté.e à internet. Veuillez vérifier votre connection",
-    "wrong_ip":"Impossible d'atteindre cette IP / adresse",
-    "hostname":"Adresse : {responseHostname}",
-    "players":"Joueurs : {responsePlayerCount} / {responseMaxPlayers}",
-    "hostname_imput":"Adresse ou IP"
+  "welcome_message": "Entrez L'IP ou l'adresse du serveur",
+  "no_internet": "Vous n'êtes pas connecté.e à internet. Veuillez vérifier votre connection",
+  "wrong_ip": "Impossible d'atteindre cette IP / adresse",
+  "hostname": "Adresse : {responseHostname}",
+  "players": "Joueurs : {responsePlayerCount} / {responseMaxPlayers}",
+  "hostname_imput": "Adresse ou IP",
+  "playerListUnavailable": "Liste des joueurs indisponible"
 }

@@ -94,6 +94,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Player list unavailable`
+  String get playerListUnavailable {
+    return Intl.message(
+      'Player list unavailable',
+      name: 'playerListUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
